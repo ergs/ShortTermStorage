@@ -119,7 +119,7 @@ class ShortTermStorage : public cyclus::Facility  {
   double maximum_storage;
  
  private:
-  cyclus::toolkit::ResourceBuff storage_;
+  cyclus::toolkit::ResBuf<cyclus::Material> storage_;
 
 
   // And away we go!

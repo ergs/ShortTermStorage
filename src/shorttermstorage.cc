@@ -14,7 +14,7 @@ std::string ShortTermStorage::str() {
 void ShortTermStorage::Tick() {
     cyclus::Context* ctx = context();
     std::vector<cyclus::Material::Ptr> manifest;
-    manifest = cyclus::ResCast<Material>(storage_.PopN(storage_.count()));
+    manifest = cyclus::ResCast<cyclus::Material>(storage_.PopN(storage_.count()));
     for (int i = 0; i < manifest.size(); ++i){
         manifest[i].Decay(ctx->time());
     }
