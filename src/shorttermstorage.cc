@@ -12,13 +12,14 @@ std::string ShortTermStorage::str() {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void ShortTermStorage::Tick() {
+    using cyclus::Material;
     cyclus::Context* ctx = context();
-    std::vector<cyclus::Material::Ptr> manifest;
+    std::vector<Material::Ptr> manifest;
     manifest = cyclus::ResCast<Material>(storage_.PopN(storage_.count()));
     for (int i = 0; i < manifest.size(); ++i){
-        manifest[i].Decay(ctx->time());
+        manifest[i]->Decay(ctx->time());
     }
-    storage.PushAll(manifest);
+    storage_.PushAll(manifest);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -34,7 +35,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
     using cyclus::CompMap;
 
     std::set<RequestPortfolio<Material>::Ptr> ports;
-    if(storage_.quantity() => maximum_storage){return ports;}
+    if(storage_.quantity() >= maximum_storage){return ports;}
 
 
     //Define Constraint Capacity
@@ -91,7 +92,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
     std::vector<Request<Material>*>::iterator it;
     for (it = requests.begin(); it != requests.end(); ++it) {
         Request<Material>* req = *it;
-        
+
     }
     RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
     storage_.PushAll(manifest);
@@ -119,7 +120,7 @@ double decay_heat(cyclus::Material::Ptr mat) {
     double heat = mat.DecayHeat();
     if(heat > dec_heat_ulimit || heat < dec_heat_llimit ){
         pref = 0;
-    return pref;    
+    return pref;
 }
 
 // WARNING! Do not change the following this function!!! This enables your
