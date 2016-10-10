@@ -48,24 +48,12 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
     CapacityConstraint<Material> cc (cc_left);
 
     //Building ports
-    port->AddRequest(target, this, in_commod);
+    port->AddRequest(target, this, in_commod, 1.0, false,
+                     // INSERT SCOPATZ RAGE
+                     std::bind(&ShortTermStorage::decay_heat, this, std::placeholders::_1));
     port->AddConstraint(cc);
     ports.insert(port);
     return ports;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Accept material offered
-void ShortTermStorage::AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
-                                        cyclus::Material::Ptr> >& responses) {
-
-    std::vector<std::pair<cyclus::Trade<cyclus::Material>, cyclus::Material::Ptr> >::const_iterator it;
-
-    for (it = responses.begin(); it != responses.end(); ++it) {
-        if(it->first.request->commodity() == in_commod){
-            storage_.Push(it->second);
-        }
-    }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -95,11 +83,32 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
     std::vector<Request<Material>*>::iterator it;
     for (it = requests.begin(); it != requests.end(); ++it) {
         Request<Material>* req = *it;
-
+        Request<Material>::cost_function_t cf = req->cost_function();
+        BidPortfolio<Material>::Ptr port(new BidPortfolio<Material>());
+        for (int i = 0; i < manifest.size(); ++i) {
+            if (cf == NULL || cf(manifest[i]) <= 1.0) {
+                port->AddBid(req, manifest[i], this);
+            }
+        }
+        ports.insert(port);
     }
     storage_.Push(manifest);
-
     return ports;
+}
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Accept material offered
+void ShortTermStorage::AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
+                                        cyclus::Material::Ptr> >& responses) {
+
+    std::vector<std::pair<cyclus::Trade<cyclus::Material>, cyclus::Material::Ptr> >::const_iterator it;
+
+    for (it = responses.begin(); it != responses.end(); ++it) {
+        if(it->first.request->commodity() == in_commod){
+            storage_.Push(it->second);
+        }
+    }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -117,12 +126,12 @@ void ShortTermStorage::GetMatlTrades(const std::vector< cyclus::Trade<cyclus::Ma
 }
 
 double ShortTermStorage::decay_heat(cyclus::Material::Ptr mat) {
-    double pref = 1;
+    double cost = 1e299;
     double heat = mat->DecayHeat();
     if(heat > dec_heat_ulimit || heat < dec_heat_llimit ){
-        pref = 0;
+        cost = 1.0 - heat/dec_heat_ulimit;
     }
-    return pref;
+    return cost;
 }
 
 // WARNING! Do not change the following this function!!! This enables your

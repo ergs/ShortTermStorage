@@ -103,6 +103,7 @@ class ShortTermStorage : public cyclus::Facility  {
                       "doc" : "The amount of material that the facility " \
                               "can recieve per timestep.", \
                       "units": "kg", \
+                      "default": 1e299, \
                       "uilabel": "Recieving Capacity"}
   double input_capacity;
 
@@ -110,6 +111,7 @@ class ShortTermStorage : public cyclus::Facility  {
                       "doc" : "The amount of material that the facility " \
                               "can eject per timestep.", \
                       "units": "kg", \
+                      "default": 1e299, \
                       "uilabel": "Removal Capacity"}
   double output_capacity;
 
@@ -117,6 +119,7 @@ class ShortTermStorage : public cyclus::Facility  {
                       "doc" : "The maximum amount of material " \
                       "that the facility can hold.", \
                       "units": "kg", \
+                      "default": 1e299, \
                       "uilabel": "Maximum Storage Size"}
   double maximum_storage;
 
