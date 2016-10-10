@@ -3,18 +3,18 @@
 namespace shorttermstorage {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ShorttermstorageFacility::ShorttermstorageFacility(cyclus::Context* ctx) : cyclus::Facility(ctx) {}
+ShortTermStorage::ShortTermStorage(cyclus::Context* ctx) : cyclus::Facility(ctx) {}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-std::string ShorttermstorageFacility::str() {
+std::string ShortTermStorage::str() {
     return Facility::str();
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void ShorttermstorageFacility::Tick() {
+void ShortTermStorage::Tick() {
     cyclus::Context* ctx = context();
     std::vector<cyclus::Material::Ptr> manifest;
-    manifest = cyclus::ResCast<Material>(storage_.PopN(storage_.count())); 
+    manifest = cyclus::ResCast<Material>(storage_.PopN(storage_.count()));
     for (int i = 0; i < manifest.size(); ++i){
         manifest[i].Decay(ctx->time());
     }
@@ -22,11 +22,11 @@ void ShorttermstorageFacility::Tick() {
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void ShorttermstorageFacility::Tock() {}
+void ShortTermStorage::Tock() {}
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // The storage facility requests the amount of material it can take.
-std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShorttermstorageFacility::GetMatlRequests() {
+std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlRequests() {
     using cyclus::RequestPortfolio;
     using cyclus::Material;
     using cyclus::CapacityConstraint;
@@ -35,23 +35,22 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShorttermstorageFacili
 
     std::set<RequestPortfolio<Material>::Ptr> ports;
     if(storage_.quantity() => maximum_storage){return ports;}
-    RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
-    
+
 
     //Define Constraint Capacity
     if(storage_.qty + input_capacity > maximum_storage){
-        CapacityConstraint<Material> cc(maximum_storage - storage_.quantity()); 
+        CapacityConstraint<Material> cc(maximum_storage - storage_.quantity());
     } else {
-        CapacityConstraint<Material> cc(input_capacity); 
+        CapacityConstraint<Material> cc(input_capacity);
     }
-    
+
     //Building ports
     port->AddRequest(target, this, in_commod);
     port->AddConstraint(cc);
     ports.insert(port);
     return ports;
 }
-
+a
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Accept material offered
 void ShorttermstorageFaciilty::AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
@@ -68,7 +67,7 @@ void ShorttermstorageFaciilty::AcceptMatlTrades(const std::vector< std::pair<cyc
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Offer materials
-std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShorttermstorageFacility::GetMatlBids(
+std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlBids(
                             cyclus::CommodMap<cyclus::Material>::type& commod_requests) {
 
     using cyclus::BidPortfolio;
@@ -126,8 +125,8 @@ double decay_heat(cyclus::Material::Ptr mat) {
 // WARNING! Do not change the following this function!!! This enables your
 // archetype to be dynamically loaded and any alterations will cause your
 // archetype to fail.
-extern "C" cyclus::Agent* ConstructShorttermstorageFacility(cyclus::Context* ctx) {
-    return new ShorttermstorageFacility(ctx);
+extern "C" cyclus::Agent* ConstructShortTermStorage(cyclus::Context* ctx) {
+    return new ShortTermStorage(ctx);
 }
 
 

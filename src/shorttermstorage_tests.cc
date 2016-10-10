@@ -6,16 +6,16 @@
 #include "context.h"
 #include "facility_tests.h"
 
-using shorttermstorage::ShorttermstorageFacility;
+using shorttermstorage::ShortTermStorage;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-class ShorttermstorageFacilityTest : public ::testing::Test {
+class ShortTermStorageTest : public ::testing::Test {
  protected:
   cyclus::TestContext tc;
-  ShorttermstorageFacility* facility;
+  ShortTermStorage* facility;
 
   virtual void SetUp() {
-    facility = new ShorttermstorageFacility(tc.get());
+    facility = new ShortTermStorage(tc.get());
   }
 
   virtual void TearDown() {
@@ -24,33 +24,33 @@ class ShorttermstorageFacilityTest : public ::testing::Test {
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-TEST_F(ShorttermstorageFacilityTest, InitialState) {
+TEST_F(ShortTermStorageTest, InitialState) {
   // Test things about the initial state of the facility here
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-TEST_F(ShorttermstorageFacilityTest, Print) {
+TEST_F(ShortTermStorageTest, Print) {
   EXPECT_NO_THROW(std::string s = facility->str());
-  // Test ShorttermstorageFacility specific aspects of the print method here
+  // Test ShortTermStorage specific aspects of the print method here
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-TEST_F(ShorttermstorageFacilityTest, Tick) {
+TEST_F(ShortTermStorageTest, Tick) {
   ASSERT_NO_THROW(facility->Tick());
-  // Test ShorttermstorageFacility specific behaviors of the Tick function here
+  // Test ShortTermStorage specific behaviors of the Tick function here
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-TEST_F(ShorttermstorageFacilityTest, Tock) {
+TEST_F(ShortTermStorageTest, Tock) {
   EXPECT_NO_THROW(facility->Tock());
-  // Test ShorttermstorageFacility specific behaviors of the Tock function here
+  // Test ShortTermStorage specific behaviors of the Tock function here
 }
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Do Not Touch! Below section required for connection with Cyclus
-cyclus::Agent* ShorttermstorageFacilityConstructor(cyclus::Context* ctx) {
-  return new ShorttermstorageFacility(ctx);
+cyclus::Agent* ShortTermStorageConstructor(cyclus::Context* ctx) {
+  return new ShortTermStorage(ctx);
 }
 // Required to get functionality in cyclus agent unit tests library
 #ifndef CYCLUS_AGENT_TESTS_CONNECTED
@@ -59,7 +59,7 @@ static int cyclus_agent_tests_connected = ConnectAgentTests();
 #define CYCLUS_AGENT_TESTS_CONNECTED cyclus_agent_tests_connected
 #endif  // CYCLUS_AGENT_TESTS_CONNECTED
 INSTANTIATE_TEST_CASE_P(ShorttermstorageFac, FacilityTests,
-                        ::testing::Values(&ShorttermstorageFacilityConstructor));
+                        ::testing::Values(&ShortTermStorageConstructor));
 INSTANTIATE_TEST_CASE_P(ShorttermstorageFac, AgentTests,
-                        ::testing::Values(&ShorttermstorageFacilityConstructor));
+                        ::testing::Values(&ShortTermStorageConstructor));
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
