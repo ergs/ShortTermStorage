@@ -97,9 +97,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
         Request<Material>* req = *it;
 
     }
-    RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
     storage_.Push(manifest);
-    ports.insert(port);
 
     return ports;
 }
@@ -118,11 +116,12 @@ void ShortTermStorage::GetMatlTrades(const std::vector< cyclus::Trade<cyclus::Ma
     }
 }
 
-double decay_heat(cyclus::Material::Ptr mat) {
+double ShortTermStorage::decay_heat(cyclus::Material::Ptr mat) {
     double pref = 1;
-    double heat = mat.DecayHeat();
+    double heat = mat->DecayHeat();
     if(heat > dec_heat_ulimit || heat < dec_heat_llimit ){
         pref = 0;
+    }
     return pref;
 }
 

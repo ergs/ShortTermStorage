@@ -56,7 +56,7 @@ class ShortTermStorage : public cyclus::Facility  {
   virtual void Tock();
 
   std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> GetMatlRequests();
-  
+
   void AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
                                       cyclus::Material::Ptr> >& responses);
 
@@ -66,6 +66,8 @@ class ShortTermStorage : public cyclus::Facility  {
   void GetMatlTrades( const std::vector< cyclus::Trade<cyclus::Material> >& trades,
                       std::vector<std::pair<cyclus::Trade<cyclus::Material>,
                       cyclus::Material::Ptr> >& responses);
+
+  double decay_heat(cyclus::Material::Ptr mat);
 
   #pragma cyclus var {"tooltip": "Input commodities that the facility consumes.", \
                       "doc": "Commodities that the storage facility consumes", \
@@ -77,7 +79,7 @@ class ShortTermStorage : public cyclus::Facility  {
                       "uitype": "outcommodity", \
                       "uilabel": "Discharge Commodity"}
   std::string out_commod;
-  
+
   #pragma cyclus var {"tooltip": "The maximum decay heat limit that the "\
                       "storage facility can accomidate.", \
                       "doc" : "The facility is designed to support a used " \
@@ -117,7 +119,7 @@ class ShortTermStorage : public cyclus::Facility  {
                       "units": "kg", \
                       "uilabel": "Maximum Storage Size"}
   double maximum_storage;
- 
+
  private:
   cyclus::toolkit::ResBuf<cyclus::Material> storage_;
 
