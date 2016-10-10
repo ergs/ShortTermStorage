@@ -36,13 +36,16 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
 
     std::set<RequestPortfolio<Material>::Ptr> ports;
     if(storage_.quantity() >= maximum_storage){return ports;}
-
+    RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
+    CapacityConstraint<Material> cc;
+    CompMap cm;
+    Material::Ptr target = Material::CreateUntracked(1, Composition::CreateFromAtom(cm));
 
     //Define Constraint Capacity
     if(storage_.quantity() + input_capacity > maximum_storage){
-        CapacityConstraint<Material> cc(maximum_storage - storage_.quantity());
+        cc = maximum_storage - storage_.quantity();
     } else {
-        CapacityConstraint<Material> cc(input_capacity);
+        cc = input_capacity;
     }
 
     //Building ports
