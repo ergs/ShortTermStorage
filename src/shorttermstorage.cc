@@ -51,7 +51,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
     ports.insert(port);
     return ports;
 }
-a
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Accept material offered
 void ShorttermstorageFaciilty::AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
