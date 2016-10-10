@@ -1,4 +1,4 @@
-#include "shorttermstorage_facility.h"
+#include "shorttermstorage.h"
 
 namespace shorttermstorage {
 
