@@ -35,6 +35,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShorttermstorageFacili
 
     std::set<RequestPortfolio<Material>::Ptr> ports;
     if(storage_.quantity() => maximum_storage){return ports;}
+    RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
     
 
     //Define Constraint Capacity
@@ -93,7 +94,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShorttermstorageFacility::
         Request<Material>* req = *it;
         
     }
-
+    RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
     storage_.PushAll(manifest);
     ports.insert(port);
 
