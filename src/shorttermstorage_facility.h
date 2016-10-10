@@ -67,7 +67,7 @@ class ShorttermstorageFacility : public cyclus::Facility  {
                       std::vector<std::pair<cyclus::Trade<cyclus::Material>,
                       cyclus::Material::Ptr> >& responses);
 
-  #pragma cyclus var {"tooltip": "Input commodities that the facility consumes."\
+  #pragma cyclus var {"tooltip": "Input commodities that the facility consumes.",\
                       "doc": "Commodities that the storage facility consumes", \
                       "uitype": "incommodity"}
   std::string in_commod;
