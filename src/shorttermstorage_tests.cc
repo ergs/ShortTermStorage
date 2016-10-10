@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "shorttermstorage_facility.h"
+#include "shorttermstorage.h"
 
 #include "agent_tests.h"
 #include "context.h"
