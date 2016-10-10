@@ -37,16 +37,15 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
     std::set<RequestPortfolio<Material>::Ptr> ports;
     if(storage_.quantity() >= maximum_storage){return ports;}
     RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
-    CapacityConstraint<Material> cc;
     CompMap cm;
     Material::Ptr target = Material::CreateUntracked(1, Composition::CreateFromAtom(cm));
 
-    //Define Constraint Capacity
+    // Define Constraint Capacity
+    double cc_left = input_capacity;
     if(storage_.quantity() + input_capacity > maximum_storage){
-        cc = maximum_storage - storage_.quantity();
-    } else {
-        cc = input_capacity;
+        cc_left = maximum_storage - storage_.quantity();
     }
+    CapacityConstraint<Material> cc (cc_left);
 
     //Building ports
     port->AddRequest(target, this, in_commod);
@@ -57,7 +56,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Accept material offered
-void ShorttermstorageFaciilty::AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
+void ShortTermStorage::AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
                                         cyclus::Material::Ptr> >& responses) {
 
     std::vector<std::pair<cyclus::Trade<cyclus::Material>, cyclus::Material::Ptr> >::const_iterator it;
@@ -79,6 +78,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
     using cyclus::Converter;
     using cyclus::Material;
     using cyclus::Request;
+    using cyclus::RequestPortfolio;
 
     cyclus::Context* ctx = context();
     std::set<BidPortfolio<Material>::Ptr> ports;
@@ -106,7 +106,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Discharging material from the storage
-void ShorttermstorageFacaility::GetMatlTrades(const std::vector< cyclus::Trade<cyclus::Material> >& trades,
+void ShortTermStorage::GetMatlTrades(const std::vector< cyclus::Trade<cyclus::Material> >& trades,
         std::vector<std::pair<cyclus::Trade<cyclus::Material>,cyclus::Material::Ptr> >& responses) {
     using cyclus::Material;
     using cyclus::Trade;
