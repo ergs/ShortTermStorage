@@ -7,12 +7,12 @@
 
 namespace shorttermstorage {
 
-/// @class ShorttermstorageFacility
+/// @class ShortTermStorage
 ///
 /// This Facility is intended
 /// as a skeleton to guide the implementation of new Facility
 /// agents.
-/// The ShorttermstorageFacility class inherits from the Facility class and is
+/// The ShortTermStorage class inherits from the Facility class and is
 /// dynamically loaded by the Agent class when requested.
 ///
 /// @section intro Introduction
@@ -30,11 +30,11 @@ namespace shorttermstorage {
 /// Place a description of the detailed behavior of the agent. Consider
 /// describing the behavior at the tick and tock as well as the behavior
 /// upon sending and receiving materials and messages.
-class ShorttermstorageFacility : public cyclus::Facility  {
+class ShortTermStorage : public cyclus::Facility  {
  public:
-  /// Constructor for ShorttermstorageFacility Class
+  /// Constructor for ShortTermStorage Class
   /// @param ctx the cyclus context for access to simulation-wide parameters
-  explicit ShorttermstorageFacility(cyclus::Context* ctx);
+  explicit ShortTermStorage(cyclus::Context* ctx);
 
   /// The Prime Directive
   /// Generates code that handles all input file reading and restart operations
@@ -44,14 +44,14 @@ class ShorttermstorageFacility : public cyclus::Facility  {
 
   #pragma cyclus
 
-  /// A verbose printer for the ShorttermstorageFacility
+  /// A verbose printer for the ShortTermStorage
   virtual std::string str();
 
-  /// The handleTick function specific to the ShorttermstorageFacility.
+  /// The handleTick function specific to the ShortTermStorage.
   /// @param time the time of the tick
   virtual void Tick();
 
-  /// The handleTick function specific to the ShorttermstorageFacility.
+  /// The handleTick function specific to the ShortTermStorage.
   /// @param time the time of the tock
   virtual void Tock();
 
