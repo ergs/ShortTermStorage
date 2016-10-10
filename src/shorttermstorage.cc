@@ -15,11 +15,11 @@ void ShortTermStorage::Tick() {
     using cyclus::Material;
     cyclus::Context* ctx = context();
     std::vector<Material::Ptr> manifest;
-    manifest = cyclus::ResCast<Material>(storage_.PopN(storage_.count()));
+    manifest = storage_.PopN(storage_.count());
     for (int i = 0; i < manifest.size(); ++i){
         manifest[i]->Decay(ctx->time());
     }
-    storage_.PushAll(manifest);
+    storage_.Push(manifest);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,7 +39,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
 
 
     //Define Constraint Capacity
-    if(storage_.qty + input_capacity > maximum_storage){
+    if(storage_.quantity() + input_capacity > maximum_storage){
         CapacityConstraint<Material> cc(maximum_storage - storage_.quantity());
     } else {
         CapacityConstraint<Material> cc(input_capacity);
@@ -85,7 +85,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
 
     // Put everything in inventory to manifest
     std::vector<cyclus::Material::Ptr> manifest;
-    manifest = cyclus::ResCast<Material>(storage_.PopN(storage_.count()));
+    manifest = storage_.PopN(storage_.count());
 
     // Offering Bids
     std::vector<Request<Material>*>& requests = commod_requests[out_commod];
@@ -95,7 +95,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
 
     }
     RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
-    storage_.PushAll(manifest);
+    storage_.Push(manifest);
     ports.insert(port);
 
     return ports;
