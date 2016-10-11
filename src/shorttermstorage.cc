@@ -86,8 +86,13 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
         Request<Material>::cost_function_t cf = req->cost_function();
         BidPortfolio<Material>::Ptr port(new BidPortfolio<Material>());
         for (int i = 0; i < manifest.size(); ++i) {
-            if (cf == NULL || cf(manifest[i]) <= 1.0) {
+            if (cf == NULL) {
                 port->AddBid(req, manifest[i], this);
+            } else {
+                double cost = cf(manifest[i]);
+                if (cost <= 1.0) {
+                    port->AddBid(req, manifest[i], this, false, cost_to_pref(cost));
+                }   
             }
         }
         ports.insert(port);
@@ -132,6 +137,10 @@ double ShortTermStorage::decay_heat(cyclus::Material::Ptr mat) {
         cost = 1.0 - heat/dec_heat_ulimit;
     }
     return cost;
+}
+
+double ShortTermStorage::cost_to_pref(double c) {
+    return (c > 1.0) ? 0.0 : 10. - (c * 9.);
 }
 
 // WARNING! Do not change the following this function!!! This enables your

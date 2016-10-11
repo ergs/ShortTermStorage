@@ -68,6 +68,7 @@ class ShortTermStorage : public cyclus::Facility  {
                       cyclus::Material::Ptr> >& responses);
 
   double decay_heat(cyclus::Material::Ptr mat);
+  double cost_to_pref(double c);
 
   #pragma cyclus var {"tooltip": "Input commodities that the facility consumes.", \
                       "doc": "Commodities that the storage facility consumes", \
