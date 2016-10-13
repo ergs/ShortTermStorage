@@ -16,6 +16,10 @@
     <name>wetstorage</name>
     <config>
       <ShortTermStorage>
+        <in_commod>spent</incommod>
+        <out_commod>spent</out_commod>
+        <decay_heat_llimit></decay_heat_llimit>
+        <decay_heat_ulimit></decay_heat_ulimit>
       </ShortTermStorage>
     </config>
   </facility>
@@ -43,14 +47,13 @@
       </ShortTermStorage>
     </config>
   </facility>
-
 
   <facility>
     <name>source</name>
     <config>
       <Source>
-        <outcommod>depleted_u</outcommod>
-        <outrecipe>depleted_u</outrecipe>
+        <outcommod>spent</outcommod>
+        <outrecipe>spent_uox</outrecipe>
       </Source>
     </config>
   </facility>
