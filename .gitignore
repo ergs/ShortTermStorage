@@ -3,3 +3,4 @@ src/version.cc.in
 *.sqlite
 *.h5
 *.orig
+.ipynb_checkpoints/
