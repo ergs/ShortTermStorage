@@ -84,21 +84,21 @@ class ShortTermStorage : public cyclus::Facility  {
   #pragma cyclus var {"tooltip": "The maximum decay heat limit that the "\
                       "storage facility can accomidate.", \
                       "doc" : "The facility is designed to support a used " \
-                              "fuel with a decay heat per volume of up to this " \
+                              "fuel with a decay heat per kilogram of up to this " \
                               "value", \
-                      "units": "W/m^3", \
+                      "units": "MW/kg", \
                       "uilabel": "Decay Heat Upper Limit"}
-  double dec_heat_ulimit;
+  double decay_heat_ulimit;
 
   #pragma cyclus var {"tooltip": "The maximum decay heat limit that the "\
                       "storage facility can accomidate.", \
                       "doc" : "The facility is designed to support a used " \
-                              "fuel with a decay heat per volume of up to this " \
+                              "fuel with a decay heat per kilogram of up to this " \
                               "value", \
-                      "units": "W/m^3", \
+                      "units": "MW/kg", \
                       "uilabel": "Decay Heat Lower Limit", \
                       "default": 0}
-  double dec_heat_llimit;
+  double decay_heat_llimit;
 
   #pragma cyclus var {"tooltip": "Capacity per timestep", \
                       "doc" : "The amount of material that the facility " \

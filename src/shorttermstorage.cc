@@ -15,8 +15,12 @@ void ShortTermStorage::Tick() {
     using cyclus::Material;
     cyclus::Context* ctx = context();
     std::vector<Material::Ptr> manifest;
+    std::cout << prototype() << " " << id() << " " << storage_.quantity() << std::endl;
     manifest = storage_.PopN(storage_.count());
     for (int i = 0; i < manifest.size(); ++i){
+        /*for(auto nuc : manifest[i]->comp()->mass()){
+            std::cout << nuc.first << ": " << nuc.second << std::endl;
+        }*/
         manifest[i]->Decay(ctx->time());
     }
     storage_.Push(manifest);
@@ -38,7 +42,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
     if(storage_.quantity() >= maximum_storage){return ports;}
     RequestPortfolio<Material>::Ptr port(new RequestPortfolio<Material>());
     CompMap cm;
-    Material::Ptr target = Material::CreateUntracked(1, Composition::CreateFromAtom(cm));
+    Material::Ptr target = Material::CreateUntracked(input_capacity, Composition::CreateFromAtom(cm));
 
     // Define Constraint Capacity
     double cc_left = input_capacity;
@@ -74,17 +78,20 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
     // If theres nothing to give dont offer anything
     if(storage_.count() == 0) {return ports;}
 
+    CapacityConstraint<Material> cc (storage_.quantity());
+    BidPortfolio<Material>::Ptr port(new BidPortfolio<Material>());
+
     // Put everything in inventory to manifest
     std::vector<cyclus::Material::Ptr> manifest;
     manifest = storage_.PopN(storage_.count());
-
+    
     // Offering Bids
     std::vector<Request<Material>*>& requests = commod_requests[out_commod];
     std::vector<Request<Material>*>::iterator it;
     for (it = requests.begin(); it != requests.end(); ++it) {
         Request<Material>* req = *it;
+        //if(req->requester() == this){continue;}        
         Request<Material>::cost_function_t cf = req->cost_function();
-        BidPortfolio<Material>::Ptr port(new BidPortfolio<Material>());
         for (int i = 0; i < manifest.size(); ++i) {
             if (cf == NULL) {
                 port->AddBid(req, manifest[i], this);
@@ -95,8 +102,9 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
                 }   
             }
         }
-        ports.insert(port);
     }
+    port->AddConstraint(cc);
+    ports.insert(port);
     storage_.Push(manifest);
     return ports;
 }
@@ -110,9 +118,7 @@ void ShortTermStorage::AcceptMatlTrades(const std::vector< std::pair<cyclus::Tra
     std::vector<std::pair<cyclus::Trade<cyclus::Material>, cyclus::Material::Ptr> >::const_iterator it;
 
     for (it = responses.begin(); it != responses.end(); ++it) {
-        if(it->first.request->commodity() == in_commod){
-            storage_.Push(it->second);
-        }
+        storage_.Push(it->second);
     }
 }
 
@@ -125,22 +131,25 @@ void ShortTermStorage::GetMatlTrades(const std::vector< cyclus::Trade<cyclus::Ma
     cyclus::Context* ctx = context();
 
     std::vector< cyclus::Trade<cyclus::Material> >::const_iterator it;
-    for (it = trades.begin(); it != trades.end(); ++it) {
-
+    for (it = trades.begin(); it != trades.end(); ++it) {  
+        double qty = it->amt;
+        Material::Ptr discharge = cyclus::ResCast<Material>(storage_.Pop(qty));
+        responses.push_back(std::make_pair(*it, discharge));
     }
 }
 
 double ShortTermStorage::decay_heat(cyclus::Material::Ptr mat) {
-    double cost = 1e299;
-    double heat = mat->DecayHeat();
-    if(heat > dec_heat_ulimit || heat < dec_heat_llimit ){
-        cost = 1.0 - heat/dec_heat_ulimit;
+    double cost = 1e100;
+    double heat = mat->DecayHeat() / mat->quantity();
+    if(heat < decay_heat_ulimit && heat > decay_heat_llimit ){
+        cost = 1.0 - heat/decay_heat_ulimit;
     }
+    //std::cout << decay_heat_ulimit << ": " << heat << ": "  <<cost <<  ": " << cost_to_pref(cost) << std::endl;
     return cost;
 }
 
 double ShortTermStorage::cost_to_pref(double c) {
-    return (c > 1.0) ? 0.0 : 10. - (c * 9.);
+    return (c > 1.0) ? 0.00001 : 10. - (c * 9.);
 }
 
 // WARNING! Do not change the following this function!!! This enables your
