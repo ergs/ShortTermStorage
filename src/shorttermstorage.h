@@ -60,6 +60,8 @@ class ShortTermStorage : public cyclus::Facility  {
   void AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
                                       cyclus::Material::Ptr> >& responses);
 
+  virtual void AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& prefs);
+
   virtual std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> GetMatlBids(
                           cyclus::CommodMap<cyclus::Material>::type& commod_requests);
 
@@ -69,6 +71,7 @@ class ShortTermStorage : public cyclus::Facility  {
 
   double decay_heat(cyclus::Material::Ptr mat);
   double cost_to_pref(double c);
+  void sort_inventory();
 
   #pragma cyclus var {"tooltip": "Input commodities that the facility consumes.", \
                       "doc": "Commodities that the storage facility consumes", \
@@ -123,6 +126,14 @@ class ShortTermStorage : public cyclus::Facility  {
                       "default": 1e299, \
                       "uilabel": "Maximum Storage Size"}
   double maximum_storage;
+
+  #pragma cyclus var {"tooltip": "Maximum size", \
+                      "doc" : "The maximum amount of material " \
+                      "that the facility can hold.", \
+                      "units": "kg", \
+                      "default": 1, \
+                      "uilabel": "Maximum Storage Size"}
+  double def_pref;
 
  private:
   cyclus::toolkit::ResBuf<cyclus::Material> storage_;

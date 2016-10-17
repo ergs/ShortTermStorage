@@ -1,6 +1,6 @@
 <simulation>
   <control>
-    <duration>110</duration>
+    <duration>130</duration>
     <startmonth>1</startmonth>
     <startyear>2000</startyear>
     <decay>manual</decay>
@@ -21,7 +21,7 @@
     <config>
       <ShortTermStorage>
         <in_commod>spent</in_commod>
-        <out_commod>spent</out_commod>
+        <out_commod>spent2</out_commod>
         <decay_heat_ulimit>1.e100</decay_heat_ulimit>
       </ShortTermStorage>
     </config>
@@ -31,9 +31,9 @@
     <name>drystorage</name>
     <config>
       <ShortTermStorage>
-        <in_commod>spent</in_commod>
-        <out_commod>spent</out_commod>
-        <decay_heat_ulimit>2.8e-6</decay_heat_ulimit>
+        <in_commod>spent2</in_commod>
+        <out_commod>spent3</out_commod>
+        <decay_heat_ulimit>2.0e-6</decay_heat_ulimit>
       </ShortTermStorage>
     </config>
   </facility>
@@ -42,8 +42,8 @@
     <name>deepgeo</name>
     <config>
       <ShortTermStorage>
-        <in_commod>spent</in_commod>
-        <out_commod>spent</out_commod>
+        <in_commod>spent3</in_commod>
+        <out_commod>spent4</out_commod>
         <decay_heat_ulimit>4.2e-7</decay_heat_ulimit>
       </ShortTermStorage>
     </config>

@@ -1,5 +1,7 @@
 #include "shorttermstorage.h"
 
+#include <limits>
+
 namespace shorttermstorage {
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -17,12 +19,14 @@ void ShortTermStorage::Tick() {
     std::vector<Material::Ptr> manifest;
     std::cout << prototype() << " " << id() << " " << storage_.quantity() << std::endl;
     manifest = storage_.PopN(storage_.count());
+    double heat = 0;
     for (int i = 0; i < manifest.size(); ++i){
-        /*for(auto nuc : manifest[i]->comp()->mass()){
-            std::cout << nuc.first << ": " << nuc.second << std::endl;
-        }*/
         manifest[i]->Decay(ctx->time());
+        std::cout << i << ": " << manifest[i]->DecayHeat() << std::endl;
+        heat += manifest[i]->DecayHeat();
     }
+        
+    cyclus::toolkit::RecordTimeSeries("DecayHeat", this, heat);
     storage_.Push(manifest);
 }
 
@@ -52,7 +56,7 @@ std::set<cyclus::RequestPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetM
     CapacityConstraint<Material> cc (cc_left);
 
     //Building ports
-    port->AddRequest(target, this, in_commod, 1.0, false,
+    port->AddRequest(target, this, in_commod, def_pref, false,
                      // INSERT SCOPATZ RAGE
                      std::bind(&ShortTermStorage::decay_heat, this, std::placeholders::_1));
     port->AddConstraint(cc);
@@ -109,6 +113,34 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
     return ports;
 }
 
+void ShortTermStorage::AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& prefs) {
+    using cyclus::BidPortfolio;
+    using cyclus::CapacityConstraint;
+    using cyclus::Converter;
+    using cyclus::Material;
+    using cyclus::Request;
+    using cyclus::RequestPortfolio;
+    using cyclus::Bid;
+
+    cyclus::PrefMap<cyclus::Material>::type::iterator pmit;
+    for (pmit = prefs.begin(); pmit != prefs.end(); ++pmit) {
+        std::map<Bid<Material>*, double>::iterator mit;
+        Request<Material>* req = pmit->first;
+        if(req->requester() != this)
+            continue;
+        for (mit = pmit->second.begin(); mit != pmit->second.end(); ++mit) {
+            Bid<Material>* bid = mit->first;
+            //Bid<Material>* bid1 = Bid<Material>::Create(req, bid->offer(), this, false);
+            //std::cout <<"YESTS: " << bid1->preference() << std::endl;
+            std::cout << decay_heat_ulimit << " : " << bid->preference() << std::endl;
+            if(bid->preference() < 0.0){
+                std::cout << "FIRST "<< (mit->second) << " : ";
+                mit->second = cost_to_pref(decay_heat(bid->offer()));
+                std::cout << (mit->second) << std::endl;
+            }
+        }
+    }
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Accept material offered
@@ -118,6 +150,7 @@ void ShortTermStorage::AcceptMatlTrades(const std::vector< std::pair<cyclus::Tra
     std::vector<std::pair<cyclus::Trade<cyclus::Material>, cyclus::Material::Ptr> >::const_iterator it;
 
     for (it = responses.begin(); it != responses.end(); ++it) {
+        //std::cout << it->first.request->requester() << ": " << it->first.bid->bidder() << std::endl;
         storage_.Push(it->second);
     }
 }
@@ -149,7 +182,14 @@ double ShortTermStorage::decay_heat(cyclus::Material::Ptr mat) {
 }
 
 double ShortTermStorage::cost_to_pref(double c) {
-    return (c > 1.0) ? 0.00001 : 10. - (c * 9.);
+    return (c > 1.0) ? 0.0 : 10. - (c * 9.);
+}
+
+void ShortTermStorage::sort_inventory() {
+    using cyclus::Material;
+    std::vector<Material::Ptr> manifest;
+    manifest = storage_.PopN(storage_.count());
+    
 }
 
 // WARNING! Do not change the following this function!!! This enables your
