@@ -101,6 +101,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
                 port->AddBid(req, manifest[i], this);
             } else {
                 double cost = cf(manifest[i]);
+                std::cout << "This is a test, cost = " << cost << std::endl;
                 if (cost <= 1.0) {
                     port->AddBid(req, manifest[i], this, false, cost_to_pref(cost));
                 }   
