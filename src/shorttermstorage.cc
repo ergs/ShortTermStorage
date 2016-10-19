@@ -101,7 +101,6 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
                 port->AddBid(req, manifest[i], this);
             } else {
                 double cost = cf(manifest[i]);
-                std::cout << "This is a test, cost = " << cost << std::endl;
                 if (cost <= 1.0) {
                     port->AddBid(req, manifest[i], this, false, cost_to_pref(cost));
                 }   
@@ -114,7 +113,7 @@ std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> ShortTermStorage::GetMatlB
     return ports;
 }
 
-void ShortTermStorage::AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& prefs) {
+/*void ShortTermStorage::AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& prefs) {
     using cyclus::BidPortfolio;
     using cyclus::CapacityConstraint;
     using cyclus::Converter;
@@ -124,24 +123,26 @@ void ShortTermStorage::AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& 
     using cyclus::Bid;
 
     cyclus::PrefMap<cyclus::Material>::type::iterator pmit;
-    for (pmit = prefs.begin(); pmit != prefs.end(); ++pmit) {
+    for (auto pmit = prefs.begin(); pmit != prefs.end();) {
         std::map<Bid<Material>*, double>::iterator mit;
         Request<Material>* req = pmit->first;
         if(req->requester() != this)
             continue;
-        for (mit = pmit->second.begin(); mit != pmit->second.end(); ++mit) {
+        for (auto mit = pmit->second.begin(); mit != pmit->second.end();) {
             Bid<Material>* bid = mit->first;
-            //Bid<Material>* bid1 = Bid<Material>::Create(req, bid->offer(), this, false);
-            //std::cout <<"YESTS: " << bid1->preference() << std::endl;
-            std::cout << decay_heat_ulimit << " : " << bid->preference() << std::endl;
             if(bid->preference() < 0.0){
-                std::cout << "FIRST "<< (mit->second) << " : ";
-                mit->second = cost_to_pref(decay_heat(bid->offer()));
-                std::cout << (mit->second) << std::endl;
+                if (cost_to_pref(decay_heat(bid->offer())) < 1.){
+                    pmit->second.erase(mit++);
+                } else {++mit;}               
             }
         }
+        if(pmit->second.empty()){
+            prefs.erase(pmit++);
+        } else {
+            ++pmit;
+        }
     }
-}
+}*/
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Accept material offered
@@ -183,7 +184,7 @@ double ShortTermStorage::decay_heat(cyclus::Material::Ptr mat) {
 }
 
 double ShortTermStorage::cost_to_pref(double c) {
-    return (c > 1.0) ? 0.0 : 10. - (c * 9.);
+    return (c > 1.0) ? 1E-100 : 10. - (c * 9.);
 }
 
 void ShortTermStorage::sort_inventory() {

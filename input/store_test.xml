@@ -1,6 +1,6 @@
 <simulation>
   <control>
-    <duration>10</duration>
+    <duration>130</duration>
     <startmonth>1</startmonth>
     <startyear>2000</startyear>
     <decay>manual</decay>
@@ -36,7 +36,7 @@
         <in_commod>spent</in_commod>
         <out_commod>spent</out_commod>
         <decay_heat_ulimit>2.0e-6</decay_heat_ulimit>
-        <def_pref>0.2</def_pref>
+        <def_pref>1.</def_pref>
         <input_capacity>1.e100</input_capacity>
       </ShortTermStorage>
     </config>
@@ -49,7 +49,7 @@
         <in_commod>spent</in_commod>
         <out_commod>spent</out_commod>
         <decay_heat_ulimit>4.2e-7</decay_heat_ulimit>
-        <def_pref>0.1</def_pref>
+        <def_pref>1.</def_pref>
         <input_capacity>1.e100</input_capacity>
       </ShortTermStorage>
     </config>

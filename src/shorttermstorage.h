@@ -60,7 +60,7 @@ class ShortTermStorage : public cyclus::Facility  {
   void AcceptMatlTrades(const std::vector< std::pair<cyclus::Trade<cyclus::Material>,
                                       cyclus::Material::Ptr> >& responses);
 
-  virtual void AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& prefs);
+  //virtual void AdjustMatlPrefs(cyclus::PrefMap<cyclus::Material>::type& prefs);
 
   virtual std::set<cyclus::BidPortfolio<cyclus::Material>::Ptr> GetMatlBids(
                           cyclus::CommodMap<cyclus::Material>::type& commod_requests);
