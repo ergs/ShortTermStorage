@@ -1,0 +1,145 @@
+              :                                                               
+          .CL:CC CC             _Q     _Q  _Q_Q    _Q    _Q              _Q   
+        CC;CCCCCCCC:C;         /_\)   /_\)/_/\\)  /_\)  /_\)            /_\)  
+        CCCCCCCCCCCCCl       __O|/O___O|/O_OO|/O__O|/O__O|/O____________O|/O__
+     CCCCCCf     iCCCLCC     /////////////////////////////////////////////////
+     iCCCt  ;;;;;.  CCCC                                                      
+    CCCC  ;;;;;;;;;. CClL.                          c                         
+   CCCC ,;;       ;;: CCCC  ;                   : CCCCi                       
+    CCC ;;         ;;  CC   ;;:                CCC`   `C;                     
+  lCCC ;;              CCCC  ;;;:             :CC .;;. C;   ;    :   ;  :;;   
+  CCCC ;.              CCCC    ;;;,           CC ;    ; Ci  ;    :   ;  :  ;  
+   iCC :;               CC       ;;;,        ;C ;       CC  ;    :   ; .      
+  CCCi ;;               CCC        ;;;.      .C ;       tf  ;    :   ;  ;.    
+  CCC  ;;               CCC          ;;;;;;; fC :       lC  ;    :   ;    ;:  
+   iCf ;;               CC         :;;:      tC ;       CC  ;    :   ;     ;  
+  fCCC :;              LCCf      ;;;:         LC :.  ,: C   ;    ;   ; ;   ;  
+  CCCC  ;;             CCCC    ;;;:           CCi `;;` CC.  ;;;; :;.;.  ; ,;  
+    CCl ;;             CC    ;;;;              CCC    CCL                     
+   tCCC  ;;        ;; CCCL  ;;;                  tCCCCC.                      
+    CCCC  ;;     :;; CCCCf  ;                     ,L                          
+     lCCC   ;;;;;;  CCCL                                                      
+     CCCCCC  :;;  fCCCCC                                                      
+      . CCCC     CCCC .                                                       
+       .CCCCCCCCCCCCCi                                                        
+          iCCCCCLCf                                                           
+           .  C. ,                                                            
+              :                                                               
+wetstorage 13 0
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 20000
+0: 0.256515
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 40000
+0: 0.256515
+1: 0.138629
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 60000
+0: 0.256515
+1: 0.138629
+2: 0.0878671
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 80000
+0: 0.256515
+1: 0.138629
+2: 0.0878671
+3: 0.0625011
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 100000
+0: 0.256515
+1: 0.138629
+2: 0.0878671
+3: 0.0625011
+4: 0.0488308
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 120000
+0: 0.256515
+1: 0.138629
+2: 0.0878671
+3: 0.0625011
+4: 0.0488308
+5: 0.0409238
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 140000
+0: 0.256515
+1: 0.138629
+2: 0.0878671
+3: 0.0625011
+4: 0.0488308
+5: 0.0409238
+6: 0.036024
+drystorage 14 0
+deepgeo 15 0
+wetstorage 13 120000
+0: 0.0878671
+1: 0.0625011
+2: 0.0488308
+3: 0.0409238
+4: 0.036024
+5: 0.0327839
+drystorage 14 40000
+0: 0.256515
+1: 0.138629
+deepgeo 15 0
+wetstorage 13 120000
+0: 0.0409238
+1: 0.036024
+2: 0.0327839
+3: 0.0305114
+4: 0.138629
+5: 0.0878671
+drystorage 14 60000
+0: 0.256515
+1: 0.0625011
+2: 0.0488308
+deepgeo 15 0
+wetstorage 13 120000
+0: 0.028833
+1: 0.0878671
+2: 0.0625011
+3: 0.138629
+4: 0.0488308
+5: 0.0409238
+drystorage 14 80000
+0: 0.256515
+1: 0.036024
+2: 0.0327839
+3: 0.0305114
+deepgeo 15 0
+wetstorage 13 120000
+0: 0.0625011
+1: 0.0488308
+2: 0.0878671
+3: 0.0409238
+4: 0.036024
+5: 0.028833
+drystorage 14 80000
+0: 0.0275363
+1: 0.138629
+2: 0.0327839
+3: 0.0305114
+deepgeo 15 0
+wetstorage 13 100000
+0: 0.0625011
+1: 0.036024
+2: 0.0327839
+3: 0.0275363
+4: 0.028833
+drystorage 14 100000
+0: 0.0488308
+1: 0.0409238
+2: 0.026495
+3: 0.0878671
+4: 0.0305114
+deepgeo 15 0
+
+Status: Cyclus run successful!
+Output location: cyclus.sqlite
+Simulation ID: e54f62c2-6acb-4c1e-8243-4e9c934c6921
