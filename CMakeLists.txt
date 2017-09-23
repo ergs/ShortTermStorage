@@ -130,7 +130,7 @@ if (DEPS_ROOT_DIR)
   SET(BOOST_ROOT "${DEPS_ROOT_DIR}")
   SET(BOOST_INCLUDEDIR "${DEPS_INCLUDE_HINTS}")
 endif (DEPS_ROOT_DIR)
-FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS program_options filesystem system serialization REQUIRED)
 SET(SHORTTERMSTORAGE_INCLUDE_DIRS ${SHORTTERMSTORAGE_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 MESSAGE("--    Boost Root: ${Boost_ROOT}")
 MESSAGE("--    Boost Include directory: ${Boost_INCLUDE_DIR}")
@@ -177,6 +177,30 @@ SET(SHORTTERMSTORAGE_INCLUDE_DIRS ${SHORTTERMSTORAGE_INCLUDE_DIRS} ${SQLITE3_INC
 SET(LIBS ${LIBS} ${SQLITE3_LIBRARIES})
 MESSAGE("--    SQLITE3 Include directories: ${SQLITE3_INCLUDE_DIR}")
 MESSAGE("--    SQLITE3 Libraries: ${SQLITE3_LIBRARIES}")
+
+# Use new Python library finder
+find_package(PythonInterp)
+find_package(PythonLibs)
+execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c
+                        "import site; print(site.getsitepackages(['${CMAKE_INSTALL_PREFIX}'])[0])"
+                OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+message("-- PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
+message("-- PYTHON_SITE_PACKAGES: ${PYTHON_SITE_PACKAGES}")
+# make sure we know about having python
+add_definitions(-DCYCLUS_WITH_PYTHON)
+set(LIBS ${LIBS} ${PYTHON_LIBRARIES})
+
+#
+# Some optional libraries to link in, as availble. Required for conda.
+#
+# pcre
+FIND_LIBRARY(PCRE_LIBRARIES pcre ${DEPS_LIB_HINTS})
+MESSAGE("-- Found PCRE Libraries (optional): ${PCRE_LIBRARIES}")
+IF(PCRE_LIBRARIES)
+    set(LIBS ${LIBS} ${PCRE_LIBRARIES})
+ENDIF(PCRE_LIBRARIES)
+
 
 # include all the directories we just found
 INCLUDE_DIRECTORIES(${SHORTTERMSTORAGE_INCLUDE_DIRS})
